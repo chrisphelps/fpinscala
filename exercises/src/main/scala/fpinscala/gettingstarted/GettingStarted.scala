@@ -79,6 +79,20 @@ object TestFib {
   }
 }
 
+object TestIsSorted {
+  def main(args: Array[String]) {
+    val lessThan = (a: Int, b: Int) => a < b
+    val greaterThan = (a: Int, b: Int) => a > b
+    val smallerThanFour = (a: Int, b: Int) => a < 3 && b < 4
+
+    val oneThroughFour = Array(1, 2, 3, 4)
+
+    println(s"lessThan: ${PolymorphicFunctions.isSorted(oneThroughFour, lessThan)} should be true")
+    println(s"greaterThan: ${PolymorphicFunctions.isSorted(oneThroughFour, greaterThan)} should be false")
+    println(s"smallerThanFour: ${PolymorphicFunctions.isSorted(oneThroughFour, smallerThanFour)} should be false")
+  }
+}
+
 // Functions get passed around so often in FP that it's
 // convenient to have syntax for constructing a function
 // *without* having to give it a name
@@ -144,7 +158,14 @@ object PolymorphicFunctions {
 
   // Exercise 2: Implement a polymorphic function to check whether
   // an `Array[A]` is sorted
-  def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = ???
+  def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = {
+    def loop(i: Int): Boolean = {
+      if (i == as.length - 1) true
+      else gt(as(i), as(i+1)) && loop(i+1)
+    }
+
+    loop(0)
+  }
 
   // Polymorphic functions are often so constrained by their type
   // that they only have one implementation! Here's an example:
