@@ -27,4 +27,18 @@ class ListTest extends FlatSpec with Matchers {
   it should "not explode on a Nil list" in {
     List.tail(Nil) shouldEqual Nil
   }
+
+  behavior of "Exercise 3.3"
+
+  it should "set the head of a list with length 3" in {
+    List.setHead(List(2, 3, 4), 1) shouldEqual List(1, 2, 3, 4)
+  }
+
+  it should "set the head of a list with length 1" in {
+    List.setHead(List(2), 1) shouldEqual List(1, 2)
+  }
+
+  it should "set the head of a Nil list" in {
+    List.setHead(Nil, 1) shouldEqual List(1)
+  }
 }
