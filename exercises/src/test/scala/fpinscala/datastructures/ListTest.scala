@@ -41,4 +41,18 @@ class ListTest extends FlatSpec with Matchers {
   it should "set the head of a Nil list" in {
     List.setHead(Nil, 1) shouldEqual List(1)
   }
+
+  behavior of "Exercise 3.4"
+
+  it should "drop the first 3 elements of a list with length 4" in {
+    List.drop(List(1, 2, 3, 4), 3) shouldEqual List(4)
+  }
+
+  it should "drop all elements when n > length" in {
+    List.drop(List(1, 2, 3, 4), 5) shouldEqual Nil
+  }
+
+  it should "not explode on a Nil list" in {
+    List.drop(Nil, 2) shouldEqual Nil
+  }
 }
