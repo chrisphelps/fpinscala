@@ -55,4 +55,29 @@ class ListTest extends FlatSpec with Matchers {
   it should "not explode on a Nil list" in {
     List.drop(Nil, 2) shouldEqual Nil
   }
+
+  behavior of "Exercise 3.5"
+
+  it should "drop the initial odd elements of a list" in {
+    def isOdd(a: Int) = {
+      (a % 2) == 1
+    }
+
+    List.dropWhile(List(1, 2, 3, 4), isOdd) shouldEqual List(2, 3, 4)
+  }
+
+  it should "drop all elements of a list when the predicate is always true" in {
+    def yop(a: Int) = true
+    List.dropWhile(List(1, 2, 3, 4), yop) shouldEqual Nil
+  }
+
+  it should "drop no elements of a list when the predicate is always false" in {
+    def nop(a: Int) = false
+    List.dropWhile(List(1, 2, 3, 4), nop) shouldEqual List(1, 2, 3, 4)
+  }
+
+  it should "not explode on a Nil list" in {
+    def yop(a: Int) = true
+    List.dropWhile(Nil, yop) shouldEqual Nil
+  }
 }
