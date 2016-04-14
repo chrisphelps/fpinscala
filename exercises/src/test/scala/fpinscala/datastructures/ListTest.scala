@@ -101,4 +101,11 @@ class ListTest extends FlatSpec with Matchers {
     List.foldRightShortCircuit(List(1, 2, 0, 4, 5), 1.0, 0, 0.0)(_ * _) shouldEqual 0.0
   }
 
+  behavior of "Exercise 3.8"
+
+  it should "enlighten me" in {
+    // Fold right can perform the same behavior as the program stack, so it can make lists.  This is cool.
+    List.foldRight(List(1, 2, 3), Nil:List[Int])(Cons(_,_)) shouldEqual List(1, 2, 3)
+  }
+
 }
