@@ -99,5 +99,10 @@ object List { // `List` companion object. Contains functions for creating and wo
     }
   }
 
+  // TODO: generalize for Numeric lists
+  def leftSum(l: List[Int]) = foldLeft(l, 0) { (b, a) => b + a }
+  def leftProduct(l: List[Double]) = foldLeft(l, 1.0) { _ * _ }
+  def leftLength[A](l: List[A]) = foldLeft(l, 0) { (lengthSoFar, _) => lengthSoFar + 1 }
+
   def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }

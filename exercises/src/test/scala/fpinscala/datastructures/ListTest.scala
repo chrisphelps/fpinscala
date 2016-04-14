@@ -124,4 +124,17 @@ class ListTest extends FlatSpec with Matchers {
     List.foldLeft(List(1, 2, 3, 4, 5), 0) { (sum, element) => sum + element } shouldEqual 15
   }
 
+  behavior of "Exercise 3.11"
+
+  it should "sum up the elements of a list" in {
+    List.leftSum(List(1, 2, 3, 4, 5)) shouldEqual 15
+  }
+
+  it should "multiply the elements of a list" in {
+    List.leftProduct(List(1.0, 2.0, 3.0, 4.0)) shouldEqual 24.0
+  }
+
+  it should "count the length of a list" in {
+    List.leftLength(List(1, 2, 3, 4, 5)) shouldEqual 5
+  }
 }
