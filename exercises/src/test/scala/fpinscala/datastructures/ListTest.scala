@@ -118,4 +118,10 @@ class ListTest extends FlatSpec with Matchers {
     List.length(List('a', 'b', 'c', 'd')) shouldEqual 4
   }
 
+  behavior of "Exercise 3.10"
+
+  it should "sum up the elements of a list" in {
+    List.foldLeft(List(1, 2, 3, 4, 5), 0) { (sum, element) => sum + element } shouldEqual 15
+  }
+
 }
