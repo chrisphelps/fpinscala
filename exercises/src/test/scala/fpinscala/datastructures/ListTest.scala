@@ -137,4 +137,10 @@ class ListTest extends FlatSpec with Matchers {
   it should "count the length of a list" in {
     List.leftLength(List(1, 2, 3, 4, 5)) shouldEqual 5
   }
+
+  behavior of "Exercise 3.12"
+
+  it should "reverse a list" in {
+    List.reverse(List(1, 2, 3)) shouldEqual List(3, 2, 1)
+  }
 }

@@ -104,5 +104,7 @@ object List { // `List` companion object. Contains functions for creating and wo
   def leftProduct(l: List[Double]) = foldLeft(l, 1.0) { _ * _ }
   def leftLength[A](l: List[A]) = foldLeft(l, 0) { (lengthSoFar, _) => lengthSoFar + 1 }
 
+  def reverse[A](list: List[A]) = foldLeft(list, Nil: List[A]) { (listSoFar, a) => Cons(a, listSoFar) }
+
   def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }
