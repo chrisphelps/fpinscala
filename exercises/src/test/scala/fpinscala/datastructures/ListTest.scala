@@ -80,4 +80,18 @@ class ListTest extends FlatSpec with Matchers {
     def yop(a: Int) = true
     List.dropWhile(Nil, yop) shouldEqual Nil
   }
+
+  behavior of "Exercise 3.6"
+
+  it should "drop the last element of a list with length 4" in {
+    List.init(List(1, 2, 3, 4)) shouldEqual List(1, 2, 3)
+  }
+
+  it should "drop a list with length 1" in {
+    List.init(List(1)) shouldEqual Nil
+  }
+
+  it should "not explode on a Nil list" in {
+    List.init(Nil) shouldEqual Nil
+  }
 }
