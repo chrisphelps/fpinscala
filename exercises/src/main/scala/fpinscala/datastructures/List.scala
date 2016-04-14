@@ -80,6 +80,14 @@ object List { // `List` companion object. Contains functions for creating and wo
     }
   }
 
+  // Types for the zero value are funky - in the multiplication example, A is B
+  def foldRightShortCircuit[A, B](as: List[A], b: B, za: A, zb: B)(f: (A, B) => B): B =
+    as match {
+      case Nil => b
+      case Cons(z, _) if z == za => zb
+      case Cons(x, xs) => f(x, foldRight(xs, b)(f))
+    }
+
   def length[A](l: List[A]): Int = sys.error("todo")
 
   def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = sys.error("todo")

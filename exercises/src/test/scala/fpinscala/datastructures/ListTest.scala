@@ -94,4 +94,11 @@ class ListTest extends FlatSpec with Matchers {
   it should "not explode on a Nil list" in {
     List.init(Nil) shouldEqual Nil
   }
+
+  behavior of "Exercise 3.7"
+
+  it should "short circuit at 0.0" in {
+    List.foldRightShortCircuit(List(1, 2, 0, 4, 5), 1.0, 0, 0.0)(_ * _) shouldEqual 0.0
+  }
+
 }
