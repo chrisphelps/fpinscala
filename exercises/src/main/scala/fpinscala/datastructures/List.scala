@@ -81,6 +81,9 @@ object List { // `List` companion object. Contains functions for creating and wo
   }
 
   // Types for the zero value are funky - in the multiplication example, A is B
+  // After talking to Chris, the short circuit can be f(za, b) if the result of the function is well defined on the zero value
+  // e.g. in multiplication, the zero value is 0, and f(0, anything) == 0.
+  //      If f(zero, anything) is not well defined (e.g. for 1/infinity), we need an explicit result.
   def foldRightShortCircuit[A, B](as: List[A], b: B, za: A, zb: B)(f: (A, B) => B): B =
     as match {
       case Nil => b
