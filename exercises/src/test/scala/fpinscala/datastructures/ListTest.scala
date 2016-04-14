@@ -108,4 +108,14 @@ class ListTest extends FlatSpec with Matchers {
     List.foldRight(List(1, 2, 3), Nil:List[Int])(Cons(_,_)) shouldEqual List(1, 2, 3)
   }
 
+  behavior of "Exercise 3.9"
+
+  it should "compute the length of an empty list" in {
+    List.length(Nil) shouldEqual 0
+  }
+
+  it should "compute the length of a list with length 4" in {
+    List.length(List('a', 'b', 'c', 'd')) shouldEqual 4
+  }
+
 }
