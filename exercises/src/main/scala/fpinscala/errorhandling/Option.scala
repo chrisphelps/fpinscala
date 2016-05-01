@@ -4,15 +4,25 @@ package fpinscala.errorhandling
 import scala.{Option => _, Some => _, Either => _, _} // hide std library `Option`, `Some` and `Either`, since we are writing our own in this chapter
 
 sealed trait Option[+A] {
-  def map[B](f: A => B): Option[B] = sys.error("todo")
+  def map[B](f: A => B): Option[B] = this match {
+    case Some(a) => Some(f(a))
+    case None => None
+  }
 
-  def getOrElse[B>:A](default: => B): B = sys.error("todo")
+  def getOrElse[B>:A](default: => B): B = this match {
+    case Some(a) => a
+    case None => default
+  }
 
-  def flatMap[B](f: A => Option[B]): Option[B] = sys.error("todo")
+  def flatMap[B](f: A => Option[B]): Option[B] = 
+    map(f).getOrElse(None)
 
-  def orElse[B>:A](ob: => Option[B]): Option[B] = sys.error("todo")
+  def orElse[B>:A](ob: => Option[B]): Option[B] = 
+    map(a => Some(a)).getOrElse(ob)
 
-  def filter(f: A => Boolean): Option[A] = sys.error("todo")
+  def filter(f: A => Boolean): Option[A] = 
+    //if(map(f).getOrElse(false)) this else None
+    flatMap(a => if (f(a)) Some(a) else None)
 }
 case class Some[+A](get: A) extends Option[A]
 case object None extends Option[Nothing]
@@ -38,11 +48,77 @@ object Option {
   def mean(xs: Seq[Double]): Option[Double] =
     if (xs.isEmpty) None
     else Some(xs.sum / xs.length)
-  def variance(xs: Seq[Double]): Option[Double] = sys.error("todo")
+  def variance(xs: Seq[Double]): Option[Double] = 
+    mean(xs).flatMap(m => mean(xs.map(x => math.pow(x - m, 2))))
 
-  def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = sys.error("todo")
+  def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = 
+    a flatMap (thea => b map (theb => f(thea, theb)))
 
-  def sequence[A](a: List[Option[A]]): Option[List[A]] = sys.error("todo")
+  def sequence1[A](a: List[Option[A]]): Option[List[A]] = a match {
+    case Nil => Some(List())
+    case o::os  => o match {
+      case None => None
+      case Some(v) =>
+        val rest = sequence(os)
+        rest match {
+          case Some(vs) => Some(v::vs)
+          case None => None
+        }
+    }
+  }
 
-  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = sys.error("todo")
+  def sequence[A](a: List[Option[A]]): Option[List[A]] = a match {
+    case Nil => Some(List())
+    case o::os  => o flatMap { v => sequence(os) flatMap { vs => Some(v :: vs) } }
+  }
+
+  def sequencefold1[A](a: List[Option[A]]): Option[List[A]] = {
+    a.foldRight[Option[List[A]]](Some(List()))((thea, thelist) =>
+      thea match {
+        case None => None
+        case Some(v) => thelist match {
+          case Some(vs) => Some(v :: vs)
+          case None => None
+        }
+      })
+  }
+
+  def sequencefold2[A](a: List[Option[A]]): Option[List[A]] = {
+    a.foldRight[Option[List[A]]](Some(List()))((thea, thelist) =>
+      thea.flatMap(v => thelist match {
+        case Some(vs) => Some(v :: vs)
+        case None => None
+      }))
+  }
+
+  def sequencefold3[A](a: List[Option[A]]): Option[List[A]] = {
+    a.foldRight[Option[List[A]]](Some(List()))((thea, thelist) =>
+      thea.flatMap(v => thelist.map(vs => v :: vs)))
+  }
+
+  def sequencefold[A](a: List[Option[A]]): Option[List[A]] = {
+    a.foldRight (Some(List()):Option[List[A]]) ((thea, thelist) =>
+      for {
+        v <- thea
+        vs <- thelist
+      } yield v :: vs
+    )
+  }
+
+  // foldright, my f calls their f and returns None or Some of running list
+  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = {
+    a.foldRight(Some(List()): Option[List[B]]) ((thea, thelist) =>
+      thelist match {
+        case None => None
+        case Some(bs) =>
+          f(thea) match {
+            case None => None
+            case Some(b) => Some(b :: bs)
+          }
+      })
+  }
+
+  def sequencetraverse[A](a: List[Option[A]]): Option[List[A]] =
+    traverse(a)(a => a)
+
 }
